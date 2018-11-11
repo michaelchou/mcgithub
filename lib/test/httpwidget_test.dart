@@ -1,7 +1,6 @@
 import 'package:mcgithub/core/config/privateconfig.dart';
 import 'package:mcgithub/core/config/config.dart';
-import 'package:mcgithub/core/net/httpclient.dart';
-import 'package:mcgithub/core/net/githubapi.dart';
+import 'package:mcgithub/action/useraction.dart';
 import 'package:mcgithub/core/store/localstorage.dart';
 
 import 'package:flutter/material.dart';
@@ -41,13 +40,13 @@ class DemoHttpPage extends StatefulWidget {
 
 class _DemoHttpPageState extends State<DemoHttpPage> {
 
-  var result = true;
+  var httpData;
+  var result;
   var data;
-  var res;
   _getAuthorizationResult() {
     setState(() {
-      result = res.result;
-      data = res.data;
+      result = httpData.result;
+      data = httpData.data;
     });
   }
 
@@ -60,25 +59,7 @@ class _DemoHttpPageState extends State<DemoHttpPage> {
       body: new Column(
         children: <Widget>[
           new RaisedButton(onPressed: () async {
-            String type = '${PConfig.GITHUB_USER_NAME}:${PConfig.GITHUB_USER_PASSWORD}';
-            var bytes = utf8.encode(type);
-            var base64Str = base64.encode(bytes);
-            if (Config.DEBUG) {
-              print("base64Str login " + base64Str);
-            }
-            await LocalStorage.save(Config.USER_NAME_KEY, PConfig.GITHUB_USER_NAME);
-            await LocalStorage.save(Config.USER_BASIC_CODE, base64Str);
-
-            Map requestParams = {
-              "scopes": ['user', 'repo', 'gist', 'notifications'],
-              "note": "admin_script",
-              "client_id": PConfig.GITHUB_CLIENT_ID,
-              "client_secret": PConfig.GITHUB_CLIENT_SECRET
-            };
-            Http.clearAuthorization();
-
-            res = await Http.fetch(Api.getAuthorization(), json.encode(requestParams), null, new Options(method: "post"));
-
+            httpData = await UserAction.login(PConfig.GITHUB_USER_NAME, PConfig.GITHUB_USER_PASSWORD);
             _getAuthorizationResult();
           },color: Colors.blue, child: new Text('HttpClient Auth'),),
           new Text('result:${result.toString()},data:$data')

@@ -1,5 +1,5 @@
 import 'package:mcgithub/core/config/config.dart';
-import 'package:mcgithub/core/net/http.dart';
+import 'package:mcgithub/core/net/httpinfo.dart';
 import 'package:mcgithub/core/store/localstorage.dart';
 
 import 'package:dio/dio.dart';
@@ -19,8 +19,8 @@ class Http {
 
   static Map optionParams = {
     Config.HTTP_TIMEOUT_KEY: Config.HTTP_TIMEOUT,
-    Config.AUTH_TOKEN_KEY: null,
-    Config.AUTH_KEY: null,
+    Config.HTTP_TOKEN_KEY: null,
+    Config.CACHE_AUTH_KEY: null,
   };
 
   /// 发起网络请求
@@ -45,14 +45,14 @@ class Http {
     }
 
     // 授权码
-    if (optionParams[Config.AUTH_KEY] == null) {
+    if (optionParams[Config.CACHE_AUTH_KEY] == null) {
       var authorizationCode = await getAuthorization();
       if (authorizationCode != null) {
-        optionParams[Config.AUTH_KEY] = authorizationCode;
+        optionParams[Config.CACHE_AUTH_KEY] = authorizationCode;
       }
     }
 
-    headers[Config.HTTP_AUTH_KEY] = optionParams[Config.AUTH_KEY];
+    headers[Config.HTTP_AUTH_KEY] = optionParams[Config.CACHE_AUTH_KEY];
 
     if (option != null) {
       option.headers = headers;
@@ -101,8 +101,8 @@ class Http {
       if (response != null) {
         print('返回参数: ${response.toString()}');
       }
-      if (optionParams[Config.AUTH_KEY] != null) {
-        print('${Config.AUTH_KEY}: ' + optionParams[Config.AUTH_KEY]);
+      if (optionParams[Config.CACHE_AUTH_KEY] != null) {
+        print('${Config.CACHE_AUTH_KEY}: ' + optionParams[Config.CACHE_AUTH_KEY]);
       }
     }
 
@@ -112,10 +112,10 @@ class Http {
         return new HttpData(response.data, true, Code.SUCCESS);
       } else {
         var responseJson = response.data;
-        if (response.statusCode == 201 && responseJson[Config.AUTH_TOKEN_KEY] != null) {
-          optionParams[Config.AUTH_KEY] = 'token ' + responseJson[Config.AUTH_TOKEN_KEY];
+        if (response.statusCode == 201 && responseJson[Config.HTTP_TOKEN_KEY] != null) {
+          optionParams[Config.CACHE_AUTH_KEY] = 'token ' + responseJson[Config.HTTP_TOKEN_KEY];
           await LocalStorage.save(
-              Config.AUTH_TOKEN_KEY, optionParams[Config.AUTH_KEY]);
+              Config.HTTP_TOKEN_KEY, optionParams[Config.CACHE_AUTH_KEY]);
         }
       }
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -136,12 +136,12 @@ class Http {
   /// 清除授权
   static clearAuthorization() {
     optionParams["authorizationCode"] = null;
-    LocalStorage.remove(Config.AUTH_TOKEN_KEY);
+    LocalStorage.remove(Config.HTTP_TOKEN_KEY);
   }
 
   /// 获取授权token
   static getAuthorization() async {
-    String token = await LocalStorage.get(Config.AUTH_TOKEN_KEY);
+    String token = await LocalStorage.get(Config.HTTP_TOKEN_KEY);
     if (token == null) {
       String basic = await LocalStorage.get(Config.USER_BASIC_CODE);
       if (basic == null) {
@@ -151,7 +151,7 @@ class Http {
         return "Basic $basic";
       }
     } else {
-      optionParams[Config.AUTH_KEY] = token;
+      optionParams[Config.CACHE_AUTH_KEY] = token;
       return token;
     }
   }
