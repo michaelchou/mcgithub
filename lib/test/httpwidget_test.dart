@@ -35,13 +35,13 @@ class DemoHttpPage extends StatefulWidget {
 
 class _DemoHttpPageState extends State<DemoHttpPage> {
 
-  var httpData;
-  var result;
-  var data;
+  var actionResult;
+  bool result;
+  String data;
   _getAuthorizationResult() {
     setState(() {
-      result = httpData.result;
-      data = httpData.data;
+      result = actionResult.result;
+      data = actionResult.data;
       print('UserInfo:$data');
     });
   }
@@ -55,7 +55,7 @@ class _DemoHttpPageState extends State<DemoHttpPage> {
       body: new Column(
         children: <Widget>[
           new RaisedButton(onPressed: () async {
-            httpData = await UserAction.login(PConfig.GITHUB_USER_NAME, PConfig.GITHUB_USER_PASSWORD);
+            actionResult = await UserAction.login(PConfig.GITHUB_USER_NAME, PConfig.GITHUB_USER_PASSWORD);
             _getAuthorizationResult();
           },color: Colors.blue, child: new Text('HttpClient Auth'),),
           new Text('result:${result.toString()},data:$data')

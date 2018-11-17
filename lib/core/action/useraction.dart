@@ -9,6 +9,7 @@ import 'package:mcgithub/core/net/httpclient.dart';
 import 'package:mcgithub/core/net/githubapi.dart';
 import 'package:mcgithub/core/action/actionresult.dart';
 import 'package:mcgithub/core/model/user.dart';
+import 'package:mcgithub/core/database/provider/user/userinfodbprovider.dart';
 
 ///
 /// @author MichaelChou
@@ -67,7 +68,7 @@ class UserAction {
 
   // 通过userName获取用户详细信息
   static getUserInfo(userName, {needDb = false}) async {
-
+    UserInfoDbProvider provider = new UserInfoDbProvider();
     next() async {
       var httpResult;
       if (userName == null) {
@@ -77,8 +78,34 @@ class UserAction {
       }
       if (httpResult != null && httpResult.result) {
         String starred = '---';
-//        if (httpResult.data['type'])
+        if (httpResult.data['type'] == 'Organization') {
+//          var countResult = await get
+        }
+        User user = User.fromJson(httpResult.data);
+        user.hireAble = starred;
+        if (userName == null) {
+          LocalStorage.save(Config.USER_INFO_KEY, json.encode(user.toJson()));
+        } else {
+          if (needDb) {
+            provider.insert(userName, json.encode(user.toJson()));
+          }
+        }
+        return new ActionResult(user, true);
+      } else {
+        return new ActionResult(httpResult.data, false);
       }
+    }
+
+    if (needDb) {
+      User user = await provider.getUserInfo(userName);
+      if (user == null) {
+        return await next();
+      } else {
+        ActionResult actionResult = new ActionResult(user, true, next: next());
+        return actionResult;
+      }
+    } else {
+      return await next();
     }
   }
 }
