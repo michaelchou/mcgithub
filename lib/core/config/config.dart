@@ -21,4 +21,5 @@ class Config {
   static const USER_BASIC_CODE = 'user-basic-code';
   static const USER_NAME_KEY = 'user-name';
   static const USER_PASSWORD_KEY = 'user-password';
+  static const USER_INFO_KEY = 'user-info';
 }

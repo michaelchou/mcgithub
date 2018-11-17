@@ -5,13 +5,13 @@ import 'package:event_bus/event_bus.dart';
 /// @date 2018/11/8 8:59 PM
 ///
 
-class HttpData {
+class HttpResult {
   var data;
   bool result;
   int code;
   var headers;
 
-  HttpData(this.data, this.result, this.code, {this.headers});
+  HttpResult(this.data, this.result, this.code, {this.headers});
 }
 
 class HttpErrorEvent {

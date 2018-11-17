@@ -33,7 +33,7 @@ class Http {
     // 检测网络
     var connectivityResult = await (new Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
-      return new HttpData(
+      return new HttpResult(
           Code.errorHandleFunction(Code.NETWORK_ERROR, "", noTip),
           false,
           Code.NETWORK_ERROR);
@@ -86,7 +86,7 @@ class Http {
           print('请求参数: ${params.toString()}');
         }
       }
-      return new HttpData(
+      return new HttpResult(
           Code.errorHandleFunction(errorResponse.statusCode, e.message, noTip),
           false,
           errorResponse.statusCode);
@@ -109,7 +109,7 @@ class Http {
     try {
       if (option.contentType != null &&
           option.contentType.primaryType == "text") {
-        return new HttpData(response.data, true, Code.SUCCESS);
+        return new HttpResult(response.data, true, Code.SUCCESS);
       } else {
         var responseJson = response.data;
         if (response.statusCode == 201 && responseJson[Config.HTTP_TOKEN_KEY] != null) {
@@ -119,15 +119,15 @@ class Http {
         }
       }
       if (response.statusCode == 200 || response.statusCode == 201) {
-        return new HttpData(response.data, true, Code.SUCCESS,
+        return new HttpResult(response.data, true, Code.SUCCESS,
             headers: response.headers);
       }
     } catch (e) {
       print(e.toString() + url);
-      return new HttpData(response.data, false, response.statusCode,
+      return new HttpResult(response.data, false, response.statusCode,
           headers: response.headers);
     }
-    return new HttpData(
+    return new HttpResult(
         Code.errorHandleFunction(response.statusCode, "", noTip),
         false,
         response.statusCode);

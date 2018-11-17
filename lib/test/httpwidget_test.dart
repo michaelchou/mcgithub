@@ -1,12 +1,7 @@
 import 'package:mcgithub/core/config/privateconfig.dart';
-import 'package:mcgithub/core/config/config.dart';
-import 'package:mcgithub/action/useraction.dart';
-import 'package:mcgithub/core/store/localstorage.dart';
+import 'package:mcgithub/core/action/useraction.dart';
 
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
-
-import 'dart:convert';
 
 ///
 /// @author MichaelChou
@@ -47,6 +42,7 @@ class _DemoHttpPageState extends State<DemoHttpPage> {
     setState(() {
       result = httpData.result;
       data = httpData.data;
+      print('UserInfo:$data');
     });
   }
 
