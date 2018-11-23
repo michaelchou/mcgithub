@@ -11,6 +11,8 @@ class MCColors {
   static const int primaryLightValue = 0xFF42464b;
   static const int primaryDarkValue = 0xFF121917;
 
+  static const int white = 0xFFFFFFFF;
+
   static const int cardWhite = 0xFFFFFFFF;
   static const int textWhite = 0xFFFFFFFF;
 
@@ -37,5 +39,5 @@ class MCIcons {
   static const String DEFAULT_USER_ICON = 'html/images/logo.png';
 
   static const IconData LOGIN_USER = const IconData(0xe666, fontFamily: MCIcons.FONT_FAMILY);
-  static const IconData LOGIN_PW = const IconData(0xe60e, fontFamily: MCIcons.FONT_FAMILY);
+  static const IconData LOGIN_PASSWORD = const IconData(0xe666, fontFamily: MCIcons.FONT_FAMILY);
 }

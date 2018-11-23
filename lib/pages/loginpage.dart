@@ -6,7 +6,10 @@ import 'package:mcgithub/core/config/config.dart';
 import 'package:mcgithub/core/redux/mcstate.dart';
 import 'package:mcgithub/core/style/mcstyle.dart';
 import 'package:mcgithub/widget/mcinputwidget.dart';
+import 'package:mcgithub/widget/mcflexbutton.dart';
 import 'package:mcgithub/core/utils/commonutils.dart';
+import 'package:mcgithub/core/utils/navigatorutils.dart';
+import 'package:mcgithub/core/action/useraction.dart';
 
 ///
 /// @author MichaelChou
@@ -24,8 +27,8 @@ class _LoginPageState extends State<LoginPage> {
   var _userName = '';
   var _password = '';
 
-  final TextEditingController userController = new TextEditingController();
-  final TextEditingController pwController = new TextEditingController();
+  final TextEditingController userController = TextEditingController();
+  final TextEditingController pwController = TextEditingController();
 
   _LoginPageState() : super();
 
@@ -38,41 +41,44 @@ class _LoginPageState extends State<LoginPage> {
   initParams() async {
     _userName = await LocalStorage.get(Config.STORE_USER_NAME_KEY);
     _password = await LocalStorage.get(Config.STORE_USER_PASSWORD_KEY);
-    userController.value = new TextEditingValue(text: _userName ?? '');
-    pwController.value = new TextEditingValue(text: _password ?? '');
+    userController.value = TextEditingValue(text: _userName ?? '');
+    pwController.value = TextEditingValue(text: _password ?? '');
   }
 
   @override
   Widget build(BuildContext context) {
-    return new StoreBuilder<MCState>(builder: (context, store) {
-      return new GestureDetector(
+    return StoreBuilder<MCState>(builder: (context, store) {
+      return GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: () {
-          FocusScope.of(context).requestFocus(new FocusNode());
+          FocusScope.of(context).requestFocus(FocusNode());
         },
-        child: new Container(
+        child: Container(
           color: Theme.of(context).primaryColor,
-          child: new Center(
-            child: new Card(
+          child: Center(
+            child: Card(
               elevation: 5.0,
-              shape: new RoundedRectangleBorder(
+              shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10.0))),
               color: Color(MCColors.cardWhite),
               margin: const EdgeInsets.all(30.0),
-              child: new Padding(
-                padding: new EdgeInsets.only(
+              child: Padding(
+                padding: EdgeInsets.only(
                     left: 30.0, top: 40.0, right: 30.0, bottom: 80.0),
-                child: new Column(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    new Image(
-                      image: new AssetImage(MCIcons.DEFAULT_USER_ICON),
+                    /// 登录logo
+                    Image(
+                      image: AssetImage(MCIcons.DEFAULT_USER_ICON),
                       width: 90.0,
                       height: 90.0,
                     ),
-                    new Padding(padding: new EdgeInsets.all(10.0)),
-                    new MCInputWidget(
+                    /// 换行
+                    Padding(padding: EdgeInsets.all(10.0)),
+                    /// 输入用户名
+                    MCInputWidget(
                       hintText:
                           CommonUtils.getLocale(context).loginUsernameHintText,
                       iconData: MCIcons.LOGIN_USER,
@@ -80,6 +86,43 @@ class _LoginPageState extends State<LoginPage> {
                         _userName = value;
                       },
                       controller: userController,
+                    ),
+                    /// 换行
+                    Padding(padding: EdgeInsets.all(10.0)),
+                    /// 输入密码
+                    MCInputWidget(
+                      hintText: CommonUtils.getLocale(context).loginPasswordHintText,
+                      iconData: MCIcons.LOGIN_PASSWORD,
+                      // obscureText: true,
+                      onChanged: (String value) {
+                        _password = value;
+                      },
+                      controller: pwController,
+                    ),
+                    /// 换行
+                    Padding(padding: EdgeInsets.all(10.0)),
+                    MCFlexButton(
+                      text: CommonUtils.getLocale(context).loginText,
+                      color: Theme.of(context).primaryColor,
+                      textColor: Color(MCColors.textWhite),
+                      onPress: () {
+                        if (_userName == null || _userName.length == 0) {
+                          return;
+                        }
+                        if (_password == null || _password.length == 0) {
+                          return;
+                        }
+                        CommonUtils.showLoadingDialog(context);
+                        UserAction.login(_userName.trim(), _password.trim(), store: store).then((actionResult) {
+                          Navigator.pop(context);
+                          if (actionResult != null && actionResult.result) {
+                            Future.delayed(const Duration(seconds: 1), () {
+                              NavigatorUtils.goHome(context);
+                              return true;
+                            });
+                          }
+                        });
+                      },
                     ),
                   ],
                 ),

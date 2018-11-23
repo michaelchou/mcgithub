@@ -29,6 +29,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   # fluttertoast: 2.0.9
+  flutter_spinkit: ^2.0.1
 
 dev_dependencies:
   flutter_test:
