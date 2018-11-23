@@ -9,7 +9,6 @@ class Config {
   static const HTTP_TIMEOUT_KEY = 'timeoutMs';
   static const HTTP_TIMEOUT = 15 * 1000;
   static const HTTP_AUTH_KEY = 'Authorization';
-  static const HTTP_TOKEN_KEY = 'token';
 
   /// page config
   static const PAGE_SIZE = 20;
@@ -18,8 +17,11 @@ class Config {
   static const CACHE_AUTH_KEY = 'authorizationCode';
 
   /// local storage config
-  static const USER_BASIC_CODE = 'user-basic-code';
-  static const USER_NAME_KEY = 'user-name';
-  static const USER_PASSWORD_KEY = 'user-password';
-  static const USER_INFO_KEY = 'user-info';
+  static const STORE_TOKEN_KEY = 'token';
+  static const STORE_BASIC_CODE_KEY = 'user-basic-code';
+  static const STORE_USER_NAME_KEY = 'user-name';
+  static const STORE_USER_PASSWORD_KEY = 'user-password';
+  static const STORE_USER_INFO_KEY = 'user-info';
+  static const STORE_THEME_COLOR = 'theme-color';
+  static const STORE_LOCALE = 'locale';
 }

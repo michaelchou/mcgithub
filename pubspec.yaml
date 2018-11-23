@@ -25,6 +25,10 @@ dependencies:
   shared_preferences: ^0.4.2
   json_annotation: ^1.1.0
   sqflite: ^0.12.2+1
+  flutter_redux: ^0.5.2
+  flutter_localizations:
+    sdk: flutter
+  # fluttertoast: 2.0.9
 
 dev_dependencies:
   flutter_test:
@@ -73,3 +77,12 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages
+
+  assets:
+    - html/images/welcome.png
+    - html/images/logo.png
+
+  fonts:
+    - family: wxcIconFont
+      fonts:
+        - asset: html/font/iconfont.ttf

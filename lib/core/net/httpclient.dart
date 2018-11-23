@@ -19,7 +19,7 @@ class Http {
 
   static Map optionParams = {
     Config.HTTP_TIMEOUT_KEY: Config.HTTP_TIMEOUT,
-    Config.HTTP_TOKEN_KEY: null,
+    Config.STORE_TOKEN_KEY: null,
     Config.CACHE_AUTH_KEY: null,
   };
 
@@ -39,7 +39,7 @@ class Http {
           Code.NETWORK_ERROR);
     }
 
-    Map<String, String> headers = new HashMap();
+    Map<String, String> headers = new Map();
     if (header != null) {
       headers.addAll(header);
     }
@@ -112,10 +112,10 @@ class Http {
         return new HttpResult(response.data, true, Code.SUCCESS);
       } else {
         var responseJson = response.data;
-        if (response.statusCode == 201 && responseJson[Config.HTTP_TOKEN_KEY] != null) {
-          optionParams[Config.CACHE_AUTH_KEY] = 'token ' + responseJson[Config.HTTP_TOKEN_KEY];
+        if (response.statusCode == 201 && responseJson[Config.STORE_TOKEN_KEY] != null) {
+          optionParams[Config.CACHE_AUTH_KEY] = 'token ' + responseJson[Config.STORE_TOKEN_KEY];
           await LocalStorage.save(
-              Config.HTTP_TOKEN_KEY, optionParams[Config.CACHE_AUTH_KEY]);
+              Config.STORE_TOKEN_KEY, optionParams[Config.CACHE_AUTH_KEY]);
         }
       }
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -136,14 +136,14 @@ class Http {
   /// 清除授权
   static clearAuthorization() {
     optionParams["authorizationCode"] = null;
-    LocalStorage.remove(Config.HTTP_TOKEN_KEY);
+    LocalStorage.remove(Config.STORE_TOKEN_KEY);
   }
 
   /// 获取授权token
   static getAuthorization() async {
-    String token = await LocalStorage.get(Config.HTTP_TOKEN_KEY);
+    String token = await LocalStorage.get(Config.STORE_TOKEN_KEY);
     if (token == null) {
-      String basic = await LocalStorage.get(Config.USER_BASIC_CODE);
+      String basic = await LocalStorage.get(Config.STORE_BASIC_CODE_KEY);
       if (basic == null) {
         //提示输入账号密码
       } else {

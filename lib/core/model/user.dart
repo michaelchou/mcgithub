@@ -71,19 +71,48 @@ class User {
   bool twoFactorAuthentication;
   String plan;
 
-  User(this.login, this.id, this.nodeId, this.avatarUrl, this.grAvatarId,
-      this.htmlUrl, this.followersUrl, this.followingUrl, this.gistsUrl,
-      this.starredUrl, this.subscriptionsUrl, this.organizationsUrl,
-      this.reposUrl, this.eventsUrl, this.receivedEventsUrl, this.type,
-      this.siteAdmin, this.name, this.company, this.blog, this.location,
-      this.email, this.hireAble, this.bio, this.publicRepos, this.publicGists,
-      this.followers, this.following, this.createdAt, this.updatedAt,
-      this.privateGists, this.totalPrivateRepos, this.ownedPrivateRepos,
-      this.diskUsage, this.collaborators, this.twoFactorAuthentication,
+  User(
+      this.login,
+      this.id,
+      this.nodeId,
+      this.avatarUrl,
+      this.grAvatarId,
+      this.htmlUrl,
+      this.followersUrl,
+      this.followingUrl,
+      this.gistsUrl,
+      this.starredUrl,
+      this.subscriptionsUrl,
+      this.organizationsUrl,
+      this.reposUrl,
+      this.eventsUrl,
+      this.receivedEventsUrl,
+      this.type,
+      this.siteAdmin,
+      this.name,
+      this.company,
+      this.blog,
+      this.location,
+      this.email,
+      this.hireAble,
+      this.bio,
+      this.publicRepos,
+      this.publicGists,
+      this.followers,
+      this.following,
+      this.createdAt,
+      this.updatedAt,
+      this.privateGists,
+      this.totalPrivateRepos,
+      this.ownedPrivateRepos,
+      this.diskUsage,
+      this.collaborators,
+      this.twoFactorAuthentication,
       this.plan);
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
-  
+
   Map<String, dynamic> toJson() => _$UserToJson(this);
 
+  User.empty();
 }
