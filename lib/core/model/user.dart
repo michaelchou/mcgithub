@@ -69,7 +69,6 @@ class User {
   int collaborators;
   @JsonKey(name: 'two_factor_authentication')
   bool twoFactorAuthentication;
-  String plan;
 
   User(
       this.login,
@@ -107,8 +106,7 @@ class User {
       this.ownedPrivateRepos,
       this.diskUsage,
       this.collaborators,
-      this.twoFactorAuthentication,
-      this.plan);
+      this.twoFactorAuthentication);
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 

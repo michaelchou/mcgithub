@@ -93,7 +93,8 @@ class _LoginPageState extends State<LoginPage> {
                     MCInputWidget(
                       hintText: CommonUtils.getLocale(context).loginPasswordHintText,
                       iconData: MCIcons.LOGIN_PASSWORD,
-                      // obscureText: true,
+                      /// 内容密文
+                      obscureText: true,
                       onChanged: (String value) {
                         _password = value;
                       },
@@ -120,6 +121,8 @@ class _LoginPageState extends State<LoginPage> {
                               NavigatorUtils.goHome(context);
                               return true;
                             });
+                          } else {
+                            print(actionResult.data);
                           }
                         });
                       },

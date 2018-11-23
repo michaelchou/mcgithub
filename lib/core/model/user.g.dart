@@ -47,8 +47,7 @@ User _$UserFromJson(Map<String, dynamic> json) {
       json['owned_private_repos'] as int,
       json['disk_usage'] as int,
       json['collaborators'] as int,
-      json['two_factor_authentication'] as bool,
-      json['plan'] as String);
+      json['two_factor_authentication'] as bool);
 }
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
@@ -87,6 +86,5 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'owned_private_repos': instance.ownedPrivateRepos,
       'disk_usage': instance.diskUsage,
       'collaborators': instance.collaborators,
-      'two_factor_authentication': instance.twoFactorAuthentication,
-      'plan': instance.plan
+      'two_factor_authentication': instance.twoFactorAuthentication
     };
